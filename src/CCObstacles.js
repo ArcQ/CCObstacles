@@ -16,6 +16,16 @@ ccObstacles.prototype.addObstacleType = function(type,properties){
  	obstacleType.sprite = properties.sprite;
 };
 
+//properties is an object containing optional obstacle properties such as speed...
+ccObstacles.prototype.changeObstacleTypeProperties = function(type,properties){
+	
+	var obstacleType = this.typesArr.findFirst(type);
+	
+	//set optional properties
+	obstacleType.speed = ((properties.speed === null) ? obstacle.speed: 0);
+ 	obstacleType.sprite = properties.sprite;
+};
+
 //enterObstacle takes variable arguments (1-2) of 1.type 2.optProperties
 //optProperties is an object containing optional obstacle properties such as speed...
 
@@ -44,5 +54,6 @@ ccObstacles.prototype.setObstacleProperites = function(obstacle,optProperties){
 	obstacle.sprite = ((optProperties.sprite === null) ? obstacle.sprite : optProperties.sprite);
 };
 
+this.window = cc.Obstacles;
 module.exports = ccObstacles;
 

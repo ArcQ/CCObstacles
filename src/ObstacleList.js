@@ -1,28 +1,30 @@
 var ObstacleObj = require('./ObstacleObj.js');
 
-var ObstacleList = new window.dLinkedList();
+var ObstacleList = function(){
+	this.lastActiveNode = null;
+	this.currentUpdateNode = null;
+}
 
-ObstacleList.prototype.lastEnteredNode = null;
-ObstacleList.prototype.currentUpdateNode = null;
+ObstacleList.prototype = new window.dLinkedList();
 
 ObstacleList.prototype.init = function(){
 	var firstNode = this.addObstacle();
-	this.lastEnterNode = firstNode;
+	this.lastActiveNode = firstNode;
 };
 
 ObstacleList.prototype.enterObstacle = function(){
-	var nextNode = this.obstacleList.lastEnterNode.next;
+	var nextNode = this.lastActiveNode.next;
 	var nextObstacle = nextNode.obj;
 	var enterObstacleNode = null;
 	if(nextObstacle.active === true){
 		enterObstacleNode = this.addObstacleNode();
-		this.obstacleList.lastEnterNode = enterObstacleNode;
+		this.lastActiveNode = enterObstacleNode;
 	}
 	else{
 		enterObstacleNode = nextObstacle;
-		this.obstacleList.lastEnterNode = enterObstacleNode
+		this.lastActiveNode = enterObstacleNode
 	}
-	return this.obstacleList.lastEnterNode.obj;
+	return this.lastActiveNode.obj;
 };
 
 ObstacleList.prototype.addObstacleNode = function(){
@@ -31,13 +33,13 @@ ObstacleList.prototype.addObstacleNode = function(){
 		obstacle.speed = this.speed;
 		obstacle.sprite = this.sprite;
 	}
-	var node = this.obstacleList.push(obstacle);
-	this.obstacleList.lastEnterNode = node;
+	var node = this.push(obstacle);
+	this.lastActiveNode = node;
 	return node;
 };
 
 ObstacleList.prototype.resetUpdateNode = function(){
-	this.currentUpdateNode = this.lastEnterNode;
+	this.currentUpdateNode = this.lastActiveNode;
 };
 
 ObstacleList.prototype.getUpdateObstacle = function(){

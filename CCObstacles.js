@@ -17,6 +17,16 @@ ccObstacles.prototype.addObstacleType = function(type,properties){
  	obstacleType.sprite = properties.sprite;
 };
 
+//properties is an object containing optional obstacle properties such as speed...
+ccObstacles.prototype.changeObstacleTypeProperties = function(type,properties){
+	
+	var obstacleType = this.typesArr.findFirst(type);
+	
+	//set optional properties
+	obstacleType.speed = ((properties.speed === null) ? obstacle.speed: 0);
+ 	obstacleType.sprite = properties.sprite;
+};
+
 //enterObstacle takes variable arguments (1-2) of 1.type 2.optProperties
 //optProperties is an object containing optional obstacle properties such as speed...
 
@@ -45,35 +55,38 @@ ccObstacles.prototype.setObstacleProperites = function(obstacle,optProperties){
 	obstacle.sprite = ((optProperties.sprite === null) ? obstacle.sprite : optProperties.sprite);
 };
 
+this.window = cc.Obstacles;
 module.exports = ccObstacles;
 
 
 },{"./ObstacleObj":3,"./ObstacleType":4}],2:[function(require,module,exports){
 var ObstacleObj = require('./ObstacleObj.js');
 
-var ObstacleList = new window.dLinkedList();
+var ObstacleList = function(){
+	this.lastActiveNode = null;
+	this.currentUpdateNode = null;
+}
 
-ObstacleList.prototype.lastEnteredNode = null;
-ObstacleList.prototype.currentUpdateNode = null;
+ObstacleList.prototype = new window.dLinkedList();
 
 ObstacleList.prototype.init = function(){
 	var firstNode = this.addObstacle();
-	this.lastEnterNode = firstNode;
+	this.lastActiveNode = firstNode;
 };
 
 ObstacleList.prototype.enterObstacle = function(){
-	var nextNode = this.obstacleList.lastEnterNode.next;
+	var nextNode = this.lastActiveNode.next;
 	var nextObstacle = nextNode.obj;
 	var enterObstacleNode = null;
 	if(nextObstacle.active === true){
 		enterObstacleNode = this.addObstacleNode();
-		this.obstacleList.lastEnterNode = enterObstacleNode;
+		this.lastActiveNode = enterObstacleNode;
 	}
 	else{
 		enterObstacleNode = nextObstacle;
-		this.obstacleList.lastEnterNode = enterObstacleNode
+		this.lastActiveNode = enterObstacleNode
 	}
-	return this.obstacleList.lastEnterNode.obj;
+	return this.lastActiveNode.obj;
 };
 
 ObstacleList.prototype.addObstacleNode = function(){
@@ -82,13 +95,13 @@ ObstacleList.prototype.addObstacleNode = function(){
 		obstacle.speed = this.speed;
 		obstacle.sprite = this.sprite;
 	}
-	var node = this.obstacleList.push(obstacle);
-	this.obstacleList.lastEnterNode = node;
+	var node = this.push(obstacle);
+	this.lastActiveNode = node;
 	return node;
 };
 
 ObstacleList.prototype.resetUpdateNode = function(){
-	this.currentUpdateNode = this.lastEnterNode;
+	this.currentUpdateNode = this.lastActiveNode;
 };
 
 ObstacleList.prototype.getUpdateObstacle = function(){
