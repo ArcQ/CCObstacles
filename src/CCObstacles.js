@@ -1,59 +1,84 @@
 var ObstacleObj = require('./ObstacleObj');
-var ObstacleType = require('./ObstacleType')
+var ObstacleType = require('./ObstacleType');
 
 var ccObstacles = function(){
-	this.typesArr = [];
+	this.typesList = new window.dLinkedList();
 };
 
 //properties is an object containing optional obstacle properties such as speed...
 ccObstacles.prototype.addObstacleType = function(type,properties){
-	
-	var obstacleType = new ObstacleList();
-	this.typesArr.push(obstacleType);
-	
+	console.log("Trace: addObstacleType()");
+	//only do something is type hasn't already been added
+	if(this.findObstacleType(type)===undefined){
+			if((properties===undefined)||(properties ===null)){
+				properties = {};
+			}
+			var obstacleType = new ObstacleType();
+			obstacleType.type = type;
+
+			this.typesList.push(obstacleType);
 	//set optional properties
-	obstacleType.speed = ((properties.speed === null) ? obstacle.speed: 0);
- 	obstacleType.sprite = properties.sprite;
+	this.setObstacleProperties(obstacleType,properties);
+	}
 };
 
 //properties is an object containing optional obstacle properties such as speed...
 ccObstacles.prototype.changeObstacleTypeProperties = function(type,properties){
-	
-	var obstacleType = this.typesArr.findFirst(type);
-	
+
+	var obstacleType = this.findObstacleType(type);
+	if((properties===undefined)||(properties ===null)){
+		properties = {};
+	}
 	//set optional properties
-	obstacleType.speed = ((properties.speed === null) ? obstacle.speed: 0);
- 	obstacleType.sprite = properties.sprite;
+		this.setObstacleProperties(obstacleType,properties);
 };
 
 //enterObstacle takes variable arguments (1-2) of 1.type 2.optProperties
 //optProperties is an object containing optional obstacle properties such as speed...
-
 ccObstacles.prototype.enterObstacle = function(){
-	
-	var types = arguments[0];
-	var obstacleType = this.typesArr[type];
+
+	var type = arguments[0];
+	console.log(this.typesList);
+	var obstacleType = this.findObstacleType(type);
+	console.log(this.typesList);
 	var obstacle = obstacleType.enterObstacle();
 
 	if(arguments[1] !== null){
-		this.setObstacleProperites(obstacle,arguments[1]);
+		this.setObstacleProperties(obstacle,arguments[1]);
 	}
 	
 };
 
 ccObstacles.prototype.update = function(dt){
-	for(var i = 0; i < this.typesArr.length; i++){
-		var obstacleType = this.typesArr[i];
-		obstacleType.update(dt);
+	var otNode = this.typesList.head;
+	otNode.obj.update;
+	while(otNode != this.typesList.head){
+		otNode = otNode.next;
+		otNode.obj.update(dt);
 	}
-}
+}					
 
-ccObstacles.prototype.setObstacleProperites = function(obstacle,optProperties){
-	obstacle.speed = ((optProperties.speed === null) ? obstacle.speed: optProperties.speed);
-	obstacle.progress = ((optProperties.progress === null) ? obstacle.progress : optProperties.progress);
-	obstacle.sprite = ((optProperties.sprite === null) ? obstacle.sprite : optProperties.sprite);
+ccObstacles.prototype.setObstacleProperties = function(obstacle,optProperties){
+	console.log("Trace: setObstacleProperties()");
+
+	obstacle.properties.speed = ((optProperties.speed === null) ? obstacle.properties.speed: optProperties.speed);
+	obstacle.properties.progress = ((optProperties.progress === null) ? obstacle.properties.progress : optProperties.progress);
+	obstacle.properties.sprite = ((optProperties.sprite === null) ? obstacle.properties.sprite : optProperties.sprite);
+	obstacle.properties.isActive = (obstacle.progress <= 0);
 };
 
-this.window = cc.Obstacles;
+ccObstacles.prototype.findObstacleType = function(type){
+	var currentNode = this.typesList.head;
+	while(currentNode !== null){
+		console.log(currentNode.obj.type);
+		if(currentNode.obj.type === type){
+			return currentNode.obj;
+		}
+		currentNode = currentNode.next;
+	}
+	return undefined;
+};
+
+window.ccObstacles = ccObstacles;
 module.exports = ccObstacles;
 

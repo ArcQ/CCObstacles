@@ -1,10 +1,13 @@
-var ObstacleList = require('./ObstacleList')
+var ObstacleList = require('./ObstacleList');
+var ObstacleProperties = require('./ObstacleProperties');
 
 var ObstacleType = function(){
-	this.speed = 0;
-	this.sprite = null;
+	this.type = -1;
+	this.properties = new ObstacleProperties();
 	this.obstacleList = new ObstacleList();
 	this.obstacleList.init();
+
+
 };
 
 ObstacleType.prototype.enterObstacle = function(){
@@ -19,8 +22,8 @@ ObstacleType.prototype.update = function(dt){
 	while(isActive === true){
 		var obstacle = this.obstacleList.getUpdateObstacle();
 		obstacle.update(dt);
-		isActive = obstacle.isActive;
+		isActive = obstacle.properties.isActive;
 	}
-}
+};
 
 module.exports = ObstacleType;

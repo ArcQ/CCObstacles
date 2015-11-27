@@ -1,20 +1,19 @@
+var ObstacleProperties = require('./ObstacleProperties');
+
 var ObstacleObj = function(){
-	this.speed = 0;
-	this.isActive = false;
-	this.progress = 0;
-	this.sprite = null;
+	this.properties = new ObstacleProperties();
 };
 
 ObstacleObj.prototype.update = function(dt){
 	try{
-		this.progress = this.progress + (dt*this.speed);
+		this.properties.progress = this.properties.progress + (dt*this.properties.speed);
 	}
 	catch(e){
 		console.log(e);
 	}
 	if(progress >= 1){
-		this.isActive = false;
-		this.progress = 0;
+		this.properties.isActive = false;
+		this.properties.progress = 0;
 	}
 };
 
