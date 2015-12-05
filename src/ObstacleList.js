@@ -1,9 +1,10 @@
 var ObstacleObj = require('./ObstacleObj.js');
 
-var ObstacleList = function(){
+var ObstacleList = function(typeProperties){
 	this.lastActiveNode = null;
 	this.currentUpdateNode = null;
-
+	this.properties = typeProperties;
+	this.init();
 }
 
 ObstacleList.prototype = new window.dLinkedList();
@@ -11,7 +12,6 @@ ObstacleList.prototype = new window.dLinkedList();
 ObstacleList.prototype.init = function(){
 	var firstNode = this.addObstacleNode();
 	this.lastActiveNode = firstNode;
-
 };
 
 ObstacleList.prototype.enterObstacle = function(){
@@ -36,29 +36,38 @@ ObstacleList.prototype.enterObstacle = function(){
 };
 
 ObstacleList.prototype.addObstacleNode = function(){
-
 	var obstacle = new ObstacleObj;
-	
 	for(var i = 0; i < arguments.length; i++){
-		obstacle.speed = this.speed;
-		obstacle.sprite = this.sprite;
+		obstacle.speed = this.properties.speed;
+		obstacle.sprite = this.properties.sprite;
 	}
 
-	var node = this.insertAfter(this.lastActiveNode,obstacle);
+	var node;
+	
+	if(this.lastActiveNode===null){
+		node = this.push(obstacle)
+	}
+	else{
+		node = this.insertAfter(this.lastActiveNode,obstacle);
+	}
 
 	this.lastActiveNode = node;
 	
 	return node;
 };
 
-ObstacleList.prototype.resetUpdateNode = function(){
-	this.currentUpdateNode = this.lastActiveNode;
-};
+ObstacleList.prototype.updateNodes = function(dt){
+	var startNode = this.lastActiveNode;
+	var updateObstacle = function(currentNode){
+		console.log(dt);
+		var obstacle = currentNode.obj;
+		if(obstacle.properties.isActive === true){
+			obstacle.update(dt);
+		}
+		return obstacle.properties.isActive;
+	}
 
-ObstacleList.prototype.getUpdateObstacle = function(){
-	var obstacle = this.currentUpdateNode.obj;
-	this.currentUpdateNode = this.currentUpdateNode.prev;
-	return obstacle;
+	this.iterate(updateObstacle,false,startNode);
 };
 
 module.exports = ObstacleList;

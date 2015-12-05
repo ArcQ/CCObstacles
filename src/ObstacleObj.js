@@ -11,7 +11,7 @@ ObstacleObj.prototype.update = function(dt){
 	catch(e){
 		console.log(e);
 	}
-	if(progress >= 1){
+	if(this.properties.progress >= 1){
 		this.properties.isActive = false;
 		this.properties.progress = 0;
 	}
