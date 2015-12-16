@@ -11,9 +11,9 @@ Helper.getType = function(currentNode){
 };
 
 Helper.getProgress = function(currentNode,speed,time){
-	console.log("Trace: getProgress");
+	// console.log("Trace: getProgress");
 
-	console.log(currentNode.obj);
+	// console.log(currentNode.obj);
   Helper.output = Helper.output+currentNode.obj.properties.progress +",";
 };
 

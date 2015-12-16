@@ -5,7 +5,7 @@ var ObstacleObj = function(){
 };
 
 ObstacleObj.prototype.update = function(dt){
-	try{
+ 	try{
 		this.properties.progress = this.properties.progress + (dt*this.properties.speed);
 	}
 	catch(e){

@@ -26,7 +26,7 @@ function MakeAllNodesZero(){
   linkedListTest.applyToEveryNode(makeNodeZero,callbackArgument);
 }
 ```
-//iterate takes 3-4 arguments
+//iterate takes 4-5 arguments
 
 #####Iterate With Stop Condition
 To iterate and apply your callback for a select number of nodes, use list.iterate() which takes 3-4 arguments
@@ -34,7 +34,8 @@ To iterate and apply your callback for a select number of nodes, use list.iterat
 1. callback (required), returns true if you want to continue (return true to apply to all nodes)
 2. isForward: true for forwards iteration(required) or false backwards iteration
 3. starting node
-4. arg: optional, if you need to plug arguments into callback
+4. ifCircular: true if you want tail's next to be head, head's prev to be tail
+5. arg: optional, if you need to plug arguments into callback
 
 ```javascript
 function Iterate(){   
@@ -95,5 +96,19 @@ if (oneNode !== undefined)
 ```javascript
 oneNode = linkedListTest.findFirst(1);
 linkedListTest.remove(oneNode);
+```
+
+####Get Next (Circular Linked List)
+Use this function to retrive the next node if your linked list is linked in a circular manner.
+```javascript
+var oneNode = linkedListTest.findFirst(1);
+var twoNode = linkedListTest.cGetNext(oneNode);
+```
+
+####Get Prev (Circular Linked List)
+Use this function to retrive the previous node if your linked list is linked in a circular manner.
+```javascript
+var oneNode = linkedListTest.findFirst(1);
+var threeNode = linkedListTest.cGetPrev(oneNode);
 ```
 

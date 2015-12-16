@@ -1,46 +1,62 @@
 var ObstacleObj = require('./ObstacleObj.js');
 
-var ObstacleList = function(typeProperties){
+var ObstacleList = function(){
 	this.lastActiveNode = null;
 	this.currentUpdateNode = null;
-	this.properties = typeProperties;
-	this.init();
+	this.properties = {};
 }
 
 ObstacleList.prototype = new window.dLinkedList();
 
 ObstacleList.prototype.init = function(){
 	var firstNode = this.addObstacleNode();
-	this.lastActiveNode = firstNode;
 };
 
 ObstacleList.prototype.enterObstacle = function(){
-	var nextNode = this.lastActiveNode.next;
-	if(nextNode===null){
-
+	
+	var nextNode;
+	if(this.lastActiveNode.obj.properties.isActive === false){
+		this.lastActiveNode.obj.properties.isActive = true;
+		return this.lastActiveNode;
 	}
 	else{
-		var nextObstacle = nextNode.obj;
-		var enterObstacleNode = null;
 
-		if(nextObstacle.active === true){
-			enterObstacleNode = this.addObstacleNode();
+			if((this.lastActiveNode == null)||(this.lastActiveNode === this.tail)){
+				nextNode = this.head;
+			}
+			else{
+				nextNode = this.lastActiveNode.next;
+			}
+			
+			var enterObstacleNode = null;
+
+			if(nextNode!==null){
+				var nextObstacle = nextNode.obj;
+				if(nextObstacle.active === true){
+					enterObstacleNode = this.addObstacleNode();
+				}
+				else{
+					enterObstacleNode = nextObstacle;
+				}	
+			}
+			else{
+				enterObstacleNode = this.addObstacleNode();
+			}
+
+			enterObstacleNode.obj.properties.isActive = true;
 			this.lastActiveNode = enterObstacleNode;
-		}
-		else{
-			enterObstacleNode = nextObstacle;
-			this.lastActiveNode = enterObstacleNode
-		}
-		return this.lastActiveNode.obj;
+
+			return enterObstacleNode.obj;
+
 	}
+
+	
 };
 
 ObstacleList.prototype.addObstacleNode = function(){
 	var obstacle = new ObstacleObj;
-	for(var i = 0; i < arguments.length; i++){
-		obstacle.speed = this.properties.speed;
-		obstacle.sprite = this.properties.sprite;
-	}
+	obstacle.properties.speed = this.properties.speed;
+	obstacle.properties.sprite = this.properties.sprite;
 
 	var node;
 	
@@ -58,16 +74,25 @@ ObstacleList.prototype.addObstacleNode = function(){
 
 ObstacleList.prototype.updateNodes = function(dt){
 	var startNode = this.lastActiveNode;
+	var isFirstIteration = false;
 	var updateObstacle = function(currentNode){
-		console.log(dt);
+		
+		if(isFirstIteration === true){
+			//if back at the begining of the list, end
+			if(currentNode == startNode){
+				return false;
+			}
+		}
+
 		var obstacle = currentNode.obj;
 		if(obstacle.properties.isActive === true){
 			obstacle.update(dt);
 		}
+		isFirstIteration = true;
 		return obstacle.properties.isActive;
 	}
 
-	this.iterate(updateObstacle,false,startNode);
+	this.iterateOnceThrough(updateObstacle,false,startNode,true);
 };
 
 module.exports = ObstacleList;

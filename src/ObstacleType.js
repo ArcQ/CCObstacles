@@ -1,11 +1,12 @@
 var ObstacleList = require('./ObstacleList');
 var ObstacleProperties = require('./ObstacleProperties');
 
-var ObstacleType = function(){
+var ObstacleType = function(properties){
 	this.type = -1;
 	this.properties = new ObstacleProperties();
-	console.log(this.properties.speed);
 	this.obstacleList = new ObstacleList(this.properties);
+	this.setProperties(properties);
+	this.obstacleList.init();
 };
 
 ObstacleType.prototype.enterObstacle = function(){
@@ -19,9 +20,9 @@ ObstacleType.prototype.update = function(dt){
 };
 
 ObstacleType.prototype.setProperties = function(properties){
-	this.properties.speed = ((properties.speed === null) ? this.properties.speed: properties.speed);
-	this.properties.progress = ((properties.progress === null) ? this.properties.progress : properties.progress);
-	this.properties.sprite = ((properties.sprite === null) ? this.properties.sprite : properties.sprite);
+	this.properties.speed = ((properties.speed == null) ? this.properties.speed: properties.speed);
+	this.properties.progress = ((properties.progress == null) ? this.properties.progress : properties.progress);
+	this.properties.sprite = ((properties.sprite == null) ? this.properties.sprite : properties.sprite);
 	this.obstacleList.properties = this.properties;
 };
 

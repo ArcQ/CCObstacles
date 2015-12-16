@@ -9,15 +9,13 @@ var ccObstacles = function(){
 ccObstacles.prototype.addObstacleType = function(type,properties){
 	//only do something is type hasn't already been added
 	if(this.findObstacleType(type)===undefined){
-			if((properties===undefined)||(properties ===null)){
+			if(properties==undefined){
 				properties = {};
 			}
-			var obstacleType = new ObstacleType();
+			var obstacleType = new ObstacleType(properties);
 			obstacleType.type = type;
 
 			this.typesList.push(obstacleType);
-	//set optional properties
-	this.setObstacleProperties(obstacleType,properties);
 	}
 };
 
@@ -25,7 +23,7 @@ ccObstacles.prototype.addObstacleType = function(type,properties){
 ccObstacles.prototype.changeObstacleTypeProperties = function(type,properties){
 
 	var obstacleType = this.findObstacleType(type);
-	if((properties===undefined)||(properties ===null)){
+	if(properties !=null){
 		properties = {};
 	}
 	//set optional properties
@@ -40,14 +38,13 @@ ccObstacles.prototype.enterObstacle = function(){
 	var obstacleType = this.findObstacleType(type);
 	var obstacle = obstacleType.enterObstacle();
 
-	if(arguments[1] !== null){
+	if(arguments[1] != null){
 		this.setObstacleProperties(obstacle,arguments[1]);
 	}
 	
 };
 
 ccObstacles.prototype.update = function(dt){
-
 	var updateThisType = function(otNode){
 		otNode.obj.update(dt);
 		return true;
@@ -58,15 +55,15 @@ ccObstacles.prototype.update = function(dt){
 }					
 
 ccObstacles.prototype.setObstacleProperties = function(obstacle,optProperties){
-	obstacle.properties.speed = ((optProperties.speed === null) ? obstacle.properties.speed: optProperties.speed);
-	obstacle.properties.progress = ((optProperties.progress === null) ? obstacle.properties.progress : optProperties.progress);
-	obstacle.properties.sprite = ((optProperties.sprite === null) ? obstacle.properties.sprite : optProperties.sprite);
+	obstacle.properties.speed = ((optProperties.speed == null) ? obstacle.properties.speed: optProperties.speed);
+	obstacle.properties.progress = ((optProperties.progress == null) ? obstacle.properties.progress : optProperties.progress);
+	obstacle.properties.sprite = ((optProperties.sprite == null) ? obstacle.properties.sprite : optProperties.sprite);
 	obstacle.properties.isActive = (obstacle.progress <= 0);
 };
 
 ccObstacles.prototype.findObstacleType = function(type){
 	var currentNode = this.typesList.head;
-	while(currentNode !== null){
+	while(currentNode != null){
 		if(currentNode.obj.type === type){
 			return currentNode.obj;
 		}
