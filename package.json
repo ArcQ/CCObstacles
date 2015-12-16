@@ -1,6 +1,6 @@
 {
   "name": "CCObstacles",
-  "version": "v0.0.0",
+  "version": "v1.0.0",
   "description": "Obstacle Module for High Score Games Written in Cocos2djs",
   "author": "Eddie Law <eddielaw296@gmail.com>",
   "scripts": {
