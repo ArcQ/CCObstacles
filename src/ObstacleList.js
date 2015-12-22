@@ -4,6 +4,7 @@ var ObstacleList = function(){
 	this.lastActiveNode = null;
 	this.currentUpdateNode = null;
 	this.properties = {};
+	this.spriteCB = null;
 }
 
 ObstacleList.prototype = new window.dLinkedList();
@@ -57,6 +58,7 @@ ObstacleList.prototype.addObstacleNode = function(){
 	var obstacle = new ObstacleObj;
 	obstacle.properties.speed = this.properties.speed;
 	obstacle.properties.sprite = this.properties.sprite;
+	obstacle.spriteCB = this.spriteCB;
 
 	var node;
 	

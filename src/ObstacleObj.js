@@ -2,6 +2,7 @@ var ObstacleProperties = require('./ObstacleProperties');
 
 var ObstacleObj = function(){
 	this.properties = new ObstacleProperties();
+	this.spriteCB = null;
 };
 
 ObstacleObj.prototype.update = function(dt){

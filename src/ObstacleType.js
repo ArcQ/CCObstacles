@@ -7,6 +7,9 @@ var ObstacleType = function(properties){
 	this.obstacleList = new ObstacleList(this.properties);
 	this.setProperties(properties);
 	this.obstacleList.init();
+	this.spriteCB = function(sprite){
+		return null;
+	}
 };
 
 ObstacleType.prototype.enterObstacle = function(){
@@ -25,5 +28,10 @@ ObstacleType.prototype.setProperties = function(properties){
 	this.properties.sprite = ((properties.sprite == null) ? this.properties.sprite : properties.sprite);
 	this.obstacleList.properties = this.properties;
 };
+
+ObstacleType.prototype.setSpriteCallback = function(callback){
+	this.spriteCB = callback;
+	this.obstacleList.spriteCB = this.spriteCB;
+}
 
 module.exports = ObstacleType;
