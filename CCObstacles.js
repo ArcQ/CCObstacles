@@ -3,7 +3,7 @@ var ObstacleObj = require('./ObstacleObj');
 var ObstacleType = require('./ObstacleType');
 
 var ccObstacles = function(){
-	this.typesList = new window.dLinkedList();
+	this.typesArr = [];
 };
 
 //properties is an object containing optional obstacle properties such as speed...
@@ -16,7 +16,7 @@ ccObstacles.prototype.addObstacleType = function(type,properties){
 			var obstacleType = new ObstacleType(properties);
 			obstacleType.type = type;
 
-			this.typesList.push(obstacleType);
+			this.typesArr[this.typesArr.length] = obstacleType;
 	}
 };
 
@@ -46,13 +46,9 @@ ccObstacles.prototype.enterObstacle = function(){
 };
 
 ccObstacles.prototype.update = function(dt){
-	var updateThisType = function(otNode){
-		otNode.obj.update(dt);
-		return true;
-	};
-
-	this.typesList.applyToEveryNode(updateThisType);
-
+	for(var i = 0; i< this.typesArr.length; i++){
+		this.typesArr[i].update(dt);
+	}
 }					
 
 ccObstacles.prototype.setObstacleProperties = function(obstacle,optProperties){
@@ -63,15 +59,23 @@ ccObstacles.prototype.setObstacleProperties = function(obstacle,optProperties){
 };
 
 ccObstacles.prototype.findObstacleType = function(type){
-	var currentNode = this.typesList.head;
-	while(currentNode != null){
-		if(currentNode.obj.type === type){
-			return currentNode.obj;
+	var currentTypeObj;
+	for(var i = 0; i< this.typesArr.length; i++){
+		currentTypeObj = this.typesArr[i];
+		if(currentTypeObj.type === type){
+			return currentTypeObj;
 		}
-		currentNode = currentNode.next;
 	}
 	return undefined;
 };
+
+ccObstacles.prototype.applyToEveryType = function(callback){
+	console.log(this.typesArr.length);
+	for(var i = 0; i< this.typesArr.length; i++){
+		var otNode = this.typesArr[i];
+		callback(otNode);
+	}
+}
 
 window.ccObstacles = ccObstacles;
 module.exports = ccObstacles;

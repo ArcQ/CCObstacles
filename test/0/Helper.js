@@ -6,8 +6,9 @@ Helper.reset = function(){
 	Helper.output="";
 }
 
-Helper.getType = function(currentNode){
-  Helper.output = Helper.output+currentNode.obj.type +",";
+Helper.getType = function(currentTypeObj){
+  Helper.output = Helper.output+currentTypeObj.type +",";
+
 };
 
 Helper.getProgress = function(currentNode,speed,time){

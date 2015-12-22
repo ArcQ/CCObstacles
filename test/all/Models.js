@@ -30,15 +30,15 @@ describe('Model', function () {
             ccObstacles.addObstacleType(typeA,propertiesA);
             ccObstacles.addObstacleType(typeB,propertiesB);
             Helper.reset();
-            ccObstacles.typesList.applyToEveryNode(Helper.getType);
+            ccObstacles.applyToEveryType(Helper.getType);
             expect(expT[0]).equal(Helper.output);
         }
     );
     //T1
     it('should allow consumers to move time forward', function()
         {
-            var obstacleListA = ccObstacles.typesList.head.obj.obstacleList;
-            var obstacleListB = ccObstacles.typesList.head.next.obj.obstacleList;
+            var obstacleListA = ccObstacles.typesArr[0].obstacleList;
+            var obstacleListB = ccObstacles.typesArr[1].obstacleList;
             obstacleListA.enterObstacle();
             ccObstacles.update(1);
             // console.log(obstacleListA);
